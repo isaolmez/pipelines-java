@@ -13,7 +13,7 @@ variables:
   - template: templates/variable-reuse.yml
 
 steps:
-  - script: echo ${{ format('{0} Stage', $(System.StageName)) }}
+  - script: echo ${{ format('My favorite veggie {0}', variables.favoriteVeggie) }}
     displayName: Template expression functions
   - script: echo my favorite vegetable is ${{ variables.favoriteVeggie }}
     displayName: Get variable from template
