@@ -1,0 +1,15 @@
+parameters:
+  - name: 'solution'
+    default: ''
+    type: string
+
+steps:
+  - bash: |
+      if [ -z "$SOLUTION" ]; then
+        echo "##vso[task.logissue type=error;]Missing template parameter \"solution\""
+        echo "##vso[task.complete result=Failed;]"
+      fi
+    env:
+      SOLUTION: ${{ parameters.solution }}
+    displayName: Check for required parameters
+  - script: echo solution parameter is ${{parameters.solution}}
