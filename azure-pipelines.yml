@@ -22,10 +22,26 @@ stages:
           - script: echo A1_1 ${{ variables.color }}
           - script: echo A1_2 ${{ variables.color }}
       - job: A2
-        condition: succeeded()
+        condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
         dependsOn: A1
+        timeoutInMinutes: 10 # how long to run the job before automatically cancelling
+        cancelTimeoutInMinutes: 2 # how much time to give 'run always even if cancelled tasks' before stopping them
         variables:
           color: yellow
         steps:
           - script: echo A2_1 ${{ variables.color }}
           - script: echo A2_2 ${{ variables.color }}
+  - stage: StageB
+    jobs:
+      - job: B1
+        variables:
+          mySimpleVar: simple var value
+          "my.dotted.var": dotted var value
+          "my var with spaces": var with spaces value
+        steps:
+          - script: echo Input macro = $(mySimpleVar). Env var = %MYSIMPLEVAR%
+            condition: eq(variables['agent.os'], 'Windows_NT')
+          - script: echo Input macro = $(mySimpleVar). Env var = $MYSIMPLEVAR
+            condition: in(variables['agent.os'], 'Darwin', 'Linux')
+          - bash: echo Input macro = $(my.dotted.var). Env var = $MY_DOTTED_VAR
+          - powershell: Write-Host "Input macro = $(my var with spaces). Env var = $env:MY_VAR_WITH_SPACES"
