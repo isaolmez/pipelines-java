@@ -9,7 +9,11 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+  - template: templates/variable-reuse.yml
+
 steps:
+  - script: echo my favorite vegetable is ${{ variables.favoriteVeggie }}
   - template: templates/simple-param.yml  # Template reference
     parameters:
       yesNo: false
