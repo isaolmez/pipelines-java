@@ -5,3 +5,4 @@ parameters:
 
 steps:
   - script: echo ${{ parameters.yesNo }}
+    displayName: Define template parameter

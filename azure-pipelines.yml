@@ -18,6 +18,8 @@ steps:
     parameters:
       yesNo: false
   - template: templates/enforce-parameter.yml
+    parameters:
+      solution: mysolution
   - task: Maven@3
     inputs:
       mavenPomFile: 'pom.xml'
