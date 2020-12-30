@@ -13,7 +13,10 @@ variables:
   - template: templates/variable-reuse.yml
 
 steps:
+  - script: echo ${{ format('{0} Build', variables.Agent.OS) }}
+    displayName: Template expression functions
   - script: echo my favorite vegetable is ${{ variables.favoriteVeggie }}
+    displayName: Get variable from template
   - template: templates/simple-param.yml  # Template reference
     parameters:
       yesNo: false
