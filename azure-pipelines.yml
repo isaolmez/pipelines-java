@@ -13,6 +13,7 @@ variables:
   - template: templates/variable-reuse.yml
 stages:
   - stage: StageA
+    displayName: This is the stage A
     jobs:
       - job: A1
         condition: succeeded()
@@ -32,6 +33,7 @@ stages:
           - script: echo A2_1 ${{ variables.color }}
           - script: echo A2_2 ${{ variables.color }}
   - stage: StageB
+    displayName: This is the stage B. It runs sequentially.
     jobs:
       - job: B1
         variables:
@@ -45,3 +47,18 @@ stages:
             condition: in(variables['agent.os'], 'Darwin', 'Linux')
           - bash: echo Input macro = $(my.dotted.var). Env var = $MY_DOTTED_VAR
           - powershell: Write-Host "Input macro = $(my var with spaces). Env var = $env:MY_VAR_WITH_SPACES"
+
+  - stage: StageC
+    displayName: This is the stage C. It is independent from other stages.
+    dependsOn: []
+    jobs:
+      - job: C1
+        steps:
+          - script: echo hi from stage C
+  - stage: StageD
+    displayName: This is the stage D. It is dependent on stage C.
+    dependsOn: StageC
+    jobs:
+      - job: D1
+        steps:
+          - script: echo hi from stage D
